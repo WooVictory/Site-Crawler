@@ -5,26 +5,21 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
-
-
-    <!--    <android.support.v7.widget.RecyclerView
-                android:id="@+id/mainRv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />-->
+        tools:context=".NewsSubscribeActivity">
 
     <FrameLayout
-            android:id="@+id/mainFrame"
-            android:layout_below="@+id/mainTab"
-            android:layout_width="match_parent" android:layout_height="match_parent"
-    ></FrameLayout>
+            android:id="@+id/news_container"
+            android:layout_width="match_parent"
+            android:layout_above="@+id/newsTab"
+            android:layout_height="match_parent"/>
 
     <android.support.design.widget.TabLayout
+            android:layout_alignParentBottom="true"
             android:background="#1EC800"
-            android:id="@+id/mainTab"
+            android:id="@+id/newsTab"
             app:tabTextColor="#FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="56dp"/>
+
 
 </RelativeLayout>

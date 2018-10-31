@@ -3,7 +3,7 @@ package app.woovictory.sitecrawler
 /**
  * Created by VictoryWoo
  */
-data class Datas(
+data class RankingDatas(
     var rank_title : String,
     var contents : String
 )

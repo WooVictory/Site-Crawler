@@ -3,9 +3,14 @@ package app.woovictory.sitecrawler
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import app.woovictory.sitecrawler.fragments.MovieFragment
+import app.woovictory.sitecrawler.fragments.NewsFragment
+import app.woovictory.sitecrawler.fragments.RankingFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jsoup.select.Elements
 import org.jsoup.Jsoup
@@ -14,34 +19,76 @@ import org.jsoup.Jsoup
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!) {
-            reloadBtn -> {
+            /*reloadBtn -> {
                 val start = Start()
                 start.execute()
-            }
+            }*/
         }
 
     }
 
 
-    lateinit var contents: Elements
-    lateinit var adapter: Adapter
-    lateinit var items : ArrayList<Datas>
+    /*lateinit var contents: Elements
+    lateinit var adapter: RankingAdapter
+    lateinit var items: ArrayList<RankingDatas>*/
+    var categoryList = listOf<String>("실시간 검색어", "상영 영화", "뉴스")
 
-    companion object {
+  /*  companion object {
         var htmlUrl: String = "https://www.naver.com/"
-        var text : String = " "
-    }
+        var text: String = " "
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        reloadBtn.setOnClickListener(this)
-        items = ArrayList()
+        //reloadBtn.setOnClickListener(this)
+        addFragment(RankingFragment())
+        //items = ArrayList()
+        for (item in categoryList)
+            mainTab.addTab(mainTab.newTab().setText(item))
+
+
+        mainTab.tabGravity = TabLayout.GRAVITY_FILL
+
+
+
+        mainTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab!!.position) {
+                    0 -> replaceFragment(RankingFragment())
+                    1 -> replaceFragment(MovieFragment())
+                    2 -> replaceFragment(NewsFragment())
+                }
+
+            }
+
+        })
 
 
     }
 
-    inner class Start : AsyncTask<Any, Any, Any>() {
+    fun addFragment(fragment: Fragment) {
+        val fm = supportFragmentManager
+        val transaction = fm.beginTransaction()
+        transaction.add(R.id.mainFrame, fragment)
+        transaction.commit()
+    }
+
+    fun replaceFragment(fragment: Fragment) {
+        val fm = supportFragmentManager
+        val transaction = fm.beginTransaction()
+        transaction.replace(R.id.mainFrame, fragment)
+        transaction.commit()
+    }
+
+    /*inner class Start : AsyncTask<Any, Any, Any>() {
         override fun doInBackground(vararg p0: Any?): Any? {
             var document: org.jsoup.nodes.Document
             document = Jsoup.connect(htmlUrl).get()
@@ -54,12 +101,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             for (element in contents!!) {
                 cnt += 1
                 //text = "${cnt}.${contents.text()+"\n"}"
-                var rank_count : String
-                var rank_content : String
+                var rank_count: String
+                var rank_content: String
                 rank_count = cnt.toString()
                 rank_content = element.text()
-                items.add(Datas(rank_count, rank_content))
-                adapter = Adapter(items)
+                items.add(RankingDatas(rank_count, rank_content))
+                adapter = RankingAdapter(items)
 
 
                 //text += cnt.toString() + "." + element.text() + "\n"
@@ -81,13 +128,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             super.onPostExecute(result)
             //Log.v("woo 1994", text.toString())
             //content.text = text + "\n"
-            mainRv.adapter = adapter
-            mainRv.layoutManager = LinearLayoutManager(this@MainActivity)
+            //mainRv.adapter = adapter
+            //mainRv.layoutManager = LinearLayoutManager(this@MainActivity)
             adapter.notifyDataSetChanged()
         }
 
     }
-
+*/
 
 }
 
