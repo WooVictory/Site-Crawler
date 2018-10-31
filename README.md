@@ -13,14 +13,13 @@
 
 ## 구현과정
 
-1. **Jsoup 라이브러리 사용**
-
-* **jsoup** 라이브러리를 사용하여 웹 페이지의 html을 파싱한다.
-* 웹 페이지의 html을 파싱하기 위해서 웹 페이지에 요청을 해야 하기 때문에 `AsyncTask`를 사용한다.
-* **Jsoup.connect(htmlUrl).get()**을 통해 요청을 보내고 element로 값을 받는다.
-* 다시 element.select("li dt[class=tit] a")와 같이 필요한 정보를 불러온다.
-* data class에는 link를 저장하는 별도의 변수를 두어 리스트 click 시 웹뷰로 이동하여 상세 정보를 볼 수 있다.
-* 정보를 불러오는 동안 ProgressDialog를 띄워 로딩 중을 표시한다.
+* **Jsoup 라이브러리 사용**
+ * **jsoup** 라이브러리를 사용하여 웹 페이지의 html을 파싱한다.
+ * 웹 페이지의 html을 파싱하기 위해서 웹 페이지에 요청을 해야 하기 때문에 `AsyncTask`를 사용한다.
+ * **Jsoup.connect(htmlUrl).get()**을 통해 요청을 보내고 element로 값을 받는다.
+ * 다시 element.select("li dt[class=tit] a")와 같이 필요한 정보를 불러온다.
+ * data class에는 link를 저장하는 별도의 변수를 두어 리스트 click 시 웹뷰로 이동하여 상세 정보를 볼 수 있다.
+ * 정보를 불러오는 동안 ProgressDialog를 띄워 로딩 중을 표시한다.
 
 2. RecyclerView 사용
 
