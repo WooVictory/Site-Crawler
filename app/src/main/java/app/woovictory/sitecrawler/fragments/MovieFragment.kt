@@ -108,7 +108,7 @@ class MovieFragment : Fragment(),View.OnClickListener {
 
                 }
             }catch (e : Exception){
-
+                e.printStackTrace()
             }
             return null
         }

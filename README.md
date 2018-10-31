@@ -1,24 +1,112 @@
 # Site Crawler
 
 - 프로젝트명 : Site Crawler
-- 관련 기술 : Jsoup, RecyclerView,Glide
+- 관련 기술 : **Jsoup**, RecyclerView, Glide
 - Github : https://github.com/WooVictory/Site-Crawler
-- 내용 : 현재 실시간으로 검색어에 오르 내리는 키워드들이 무엇인지 궁금한데, 네이버나  다른 웹 사이트에 들어가지 않고 이 앱을 통해서 실시간 검색 순위를 가져와서 한눈에 보기 쉽도록 구현했습니다. 또한, 현재 상영 중인 영화나 네이버의 실시간 뉴스들을 카테고리별로 불러와서 사용자들이 쉽게 볼 수 있도록 구현했습니다. 이러한 정보들을 사용자들이 자주 보는 정보인데, 네이버에 들어가지 않고도 하나의 앱으로 필수적인 정보들을 볼 수 있어서 번거로움을 줄일 수 있다고 생각합니다.
+- 내용 
+1. 네이버 실시간 검색어(20개)
+2. 현재 상영 중인 영화 목록
+3. 네이버 뉴스(카테고리별로)
 
+일상 생활에서 자주 사용하지만, 내용을 확인하기 위해서는 네이버, 상영 중인 영화 목록, 네이버 뉴스를 click 하여 들어가야 합니다. 물론 다른 내용이나 정보를 보기 위해서는 이와 같은 과정이 필요합니다. 이런 `번거로움`을 줄이고자 이 애플리케이션을 제작하게 되었습니다.
 
 
 ## 구현과정
 
-1. Jsoup 라이브러리 사용
+1. **Jsoup 라이브러리 사용**
 
-   : 네이버의 실시간 검색 순위를 받아와야 하기 때문에 웹의 정보를 파싱해서 가져올 수 있도록 Jsoup을 사용했습니다. Jsoup.connect(htmlUrl).get()을 통해서 웹 정보를 가져온 후 select("span.ah_k")의 쿼리를 통해서 실시간 검색어 40개를 불러와서 20개를 보여줍니다. 또한, 네이버 영화 페이지로부터 정보를 불러와서 현재 상영 중인 영화의 이미지와 이름, 개봉 날짜, 감독 이름을 사용자에게 보여줍니다. data class에는 url 변수를 두어, 해당 링크를 string으로 저장하여 리스트에 있는 item을 click 하면 웹뷰로 넘어가서 영화에 대한 상세한 정보를 확인할 수 있습니다. 마지막으로 네이버 뉴스의 정보를 불러와서 카테고리 별로 구분했습니다. 영화 목록과 마찬가지로 data class의 url 관련 변수를 통해서 리스트의 item을 click 하면 웹뷰로 넘어가 기사를 읽을 수 있습니다. 
+* **jsoup** 라이브러리를 사용하여 웹 페이지의 html을 파싱한다.
+* 웹 페이지의 html을 파싱하기 위해서 웹 페이지에 요청을 해야 하기 때문에 `AsyncTask`를 사용한다.
+* **Jsoup.connect(htmlUrl).get()**을 통해 요청을 보내고 element로 값을 받는다.
+* 다시 element.select("li dt[class=tit] a")와 같이 필요한 정보를 불러온다.
+* data class에는 link를 저장하는 별도의 변수를 두어 리스트 click 시 웹뷰로 이동하여 상세 정보를 볼 수 있다.
+* 정보를 불러오는 동안 ProgressDialog를 띄워 로딩 중을 표시한다.
 
-1. RecyclerView 사용
+2. RecyclerView 사용
 
-   : html을 파싱해서 가져온 정보들을 단순히 View에 보여주지 않고 RecyclerView를 이용해서 효율적인 리스트 출력을 가능하게 하였습니다. ViewHolder의 의무적 사용과 LayoutManager를 사용함으로써 다양한 리스트를 구현할 수 있는 RecyclerView를 사용했습니다.
+* jsoup을 사용해서 웹 페이지 html을 파싱해서 가져온 정보들을 단순히 view에 보여주지 않고 RecyclerView를 사용!
+* `ViewHolder`의 의무적 사용과 `layoutManager`를 이용해 수평, 수직, 그리드 형태 등의 다양한 리스트 구현이 가능.
+* 이 애플리케이션에서는 LinearLayout의 vertical(수직) 형태의 리스트를 구현.
+* adapter에서 OnClickListener을 달아 해당 리스트를 click 하면 웹뷰로 넘어갈 수 있다.
 
-2. Glide 사용
-: 이미지 로드 라이브러리로 Glide를 사용했습니다. 큰 용량의 간단하게 이미지를 처리하기 위해 사용!
+3. Glide 사용
+
+* 영화 목록을 보여줄 때 html을 파싱해서 받아온 이미지를 그대로 넣으면 OOM이 발생할 위험이 커진다.
+* 이유는 **이미지의 크기**가 얼마인지 모르기 때문!
+* OOM의 발생을 줄이기 위해, 큰 용량의 이미지를 간단하게 처리하기 위해 Glide 사용.
+* `Glide.with(this).load().into()`를 이용해서 구현 가능!
+* Glide의 장점으로는 with()의 인자로 다양한 것들이 올 수 있다. 
+
+```kotlin
+inner class MovieAsyncTask : AsyncTask<Any,Any, Any>(){
+
+        private lateinit var progressDialog : ProgressDialog
+
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+
+            progressDialog = ProgressDialog(context!!)
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+            progressDialog.setMessage("잠시만 기다려주세요:)")
+            progressDialog.setCanceledOnTouchOutside(false)
+            progressDialog.show()
+        }
+
+        override fun onPostExecute(result: Any?) {
+
+            movieAdapter = MovieAdapter(movie_list, context!!)
+            movieAdapter.setOnItemClick(this@MovieFragment)
+            movieRv.adapter = movieAdapter
+            movieRv.layoutManager = LinearLayoutManager(context!!)
+            movieAdapter.notifyDataSetChanged()
+            progressDialog.dismiss()
+
+        }
+
+        override fun doInBackground(vararg p0: Any?): Any? {
+            try {
+                var doc = Jsoup.connect(htmlMovieUrl).get()
+                var element = doc.select("ul[class=lst_detail_t1]").select("li")
+                var elementSize = element.size
+                var cnt : Int = 0
+                for(elements in element!!){
+                    cnt++
+                    var movieTitle : String = cnt.toString()+". "+ elements.select("li dt[class=tit] a").text() // 영화 제목
+                    var movieLink : String = elements.select("li div[class=thumb] a").attr("href") // 영화 상세 링크
+                    var movieImg : String = elements.select("li div[class=thumb] a img").attr("src") // 영화 썸네일 이미지
+
+                    var rElem = elements.select("dl[class=info_txt1] dt").next().first()
+                    var movieRelease = rElem.select("dd").text(); // 영화 개봉일
+                    var dElem = elements.select("dt[class=tit_t2]").next().first()
+                    var movieDirector = "감독: " + dElem.select("a").text(); // 영화 감독
+
+
+                    movie_list.add(
+                        MovieDatas(
+                            movieTitle,
+                            movieImg,
+                            movieLink,
+                            movieRelease,
+                            movieDirector
+                        )
+                    ) // 리스트에 추가
+
+                }
+            }catch (e : Exception){
+                e.printStackTrace()
+            }
+            return null
+        }
+
+    }
+```
+ 
+
+
+
+# 스크린샷
+
 
 <!--
 지원 이유
