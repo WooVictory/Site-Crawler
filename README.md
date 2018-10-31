@@ -16,25 +16,17 @@
 * **Jsoup 라이브러리 사용**
     * **jsoup** 라이브러리를 사용하여 웹 페이지의 html을 파싱한다.
     * 웹 페이지의 html을 파싱하기 위해서 웹 페이지에 요청을 해야 하기 때문에 `AsyncTask`를 사용한다.
-    * **Jsoup.connect(htmlUrl).get()**을 통해 요청을 보내고 element로 값을 받는다.
+    * `Jsoup.connect(htmlUrl).get()`을 통해 요청을 보내고 element로 값을 받는다.
     * 다시 element.select("li dt[class=tit] a")와 같이 필요한 정보를 불러온다.
-    * data class에는 link를 저장하는 별도의 변수를 두어 리스트 click 시 웹뷰로 이동하여 상세 정보를 볼 수 있다.
-    * 정보를 불러오는 동안 ProgressDialog를 띄워 로딩 중을 표시한다.
 
-2. RecyclerView 사용
+* RecyclerView 사용
+    * jsoup을 사용해서 웹 페이지 html을 파싱해서 가져온 정보들을 단순히 view에 보여주지 않고 RecyclerView를 사용!
+    * `ViewHolder`의 의무적 사용과 `layoutManager`를 이용해 수평, 수직, 그리드 형태 등의 다양한 리스트 구현이 가능.
 
-* jsoup을 사용해서 웹 페이지 html을 파싱해서 가져온 정보들을 단순히 view에 보여주지 않고 RecyclerView를 사용!
-* `ViewHolder`의 의무적 사용과 `layoutManager`를 이용해 수평, 수직, 그리드 형태 등의 다양한 리스트 구현이 가능.
-* 이 애플리케이션에서는 LinearLayout의 vertical(수직) 형태의 리스트를 구현.
-* adapter에서 OnClickListener을 달아 해당 리스트를 click 하면 웹뷰로 넘어갈 수 있다.
-
-3. Glide 사용
-
-* 영화 목록을 보여줄 때 html을 파싱해서 받아온 이미지를 그대로 넣으면 OOM이 발생할 위험이 커진다.
-* 이유는 **이미지의 크기**가 얼마인지 모르기 때문!
-* OOM의 발생을 줄이기 위해, 큰 용량의 이미지를 간단하게 처리하기 위해 Glide 사용.
-* `Glide.with(this).load().into()`를 이용해서 구현 가능!
-* Glide의 장점으로는 with()의 인자로 다양한 것들이 올 수 있다. 
+* Glide 사용
+    * 영화 목록을 보여줄 때 html을 파싱해서 받아온 이미지를 그대로 넣으면 OOM이 발생할 위험이 커진다.
+    * 이유는 **이미지의 크기**가 얼마인지 모르기 때문!
+    * OOM의 발생을 줄이기 위해, 큰 용량의 이미지를 간단하게 처리하기 위해 Glide 사용.
 
 ```kotlin
 inner class MovieAsyncTask : AsyncTask<Any,Any, Any>(){
