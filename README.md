@@ -99,13 +99,13 @@ inner class MovieAsyncTask : AsyncTask<Any,Any, Any>(){
 # 스크린샷
 
 1. 실시간 검색어
-<img src="image/rank.png" width="80">
+<img src="image/rank.png" width="200">
 
 2. 영화 목록
-<img src="image/movie_rank.png" width="80">
+<img src="image/movie_rank.png" width="200">
 
 3. 뉴스
-<img src="image/news_rank.png" width="80">
+<img src="image/news_rank.png" width="200">
 <!--
 지원 이유
   이전부터 크롤링과 관련된 주제에 관심이 있었지만, 도전해 본 적은 없었습니다. 마침 핵데이에 소개된 주제를 보고 간단한 애플리케이션을 제작해보고 싶다는 마음이 생겼습니다. 그래서 저는 네이버에 들어가지 않고 네이버 실시간 검색어를 크롤링하여 20개까지 리스트로 출력하여 보여주는 앱을 제작했습니다. 
